@@ -1,0 +1,17 @@
+[ignore]
+.*/node_modules/flow-remove-types/.*
+.*/node_modules/babel-plugin-transform-react-remove-prop-types/.*
+.*/node_modules/babel-plugin-flow-react-proptypes/src/__test__/.*
+.*/node_modules/eslint-plugin-jsx-a11y/.*
+.*/node_modules/radium/.*
+.*/dist/.*
+.*/lib/.*
+
+[include]
+
+[libs]
+
+[options]
+suppress_comment=.*\\$FlowFixMe
+suppress_comment=.*\\$FlowInvalidInputTest
+unsafe.enable_getters_and_setters=true
