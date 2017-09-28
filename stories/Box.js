@@ -2,9 +2,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { Box } from '../src';
 
-storiesOf('Box', module)
-  .add('basic', () => <Box />)
-  .add('styled', () => (
+storiesOf('Box/Simple', module)
+  .add('styled w/ style', () => (
     <Box
       style={{
         width: '100px',
@@ -13,12 +12,60 @@ storiesOf('Box', module)
       }}
     />
   ))
-  .add('styled/theme', () => (
+  .add('styled w/ theme', () => (
     <Box
       style={theme => ({
         width: '100px',
         height: '50px',
-        backgroundColor: theme.testBgColor,
+        backgroundColor: theme.colors.secondary,
       })}
     />
+  ))
+  .add('styled w/ rhythm props', () => (
+    <Box
+      backgroundColor="primary"
+      width={10}
+      height={15}
+      marginHorizontal={2}
+      marginVertical={1}
+      padding={3}
+    />
   ));
+
+storiesOf('Box/Layout', module)
+  .add('inside', () => (
+    <Box backgroundColor="primary" padding={2}>
+      <Box backgroundColor="danger" width={5} height={5} marginHorizontal="auto" />
+    </Box>
+  ))
+  .add('Photo gallery', () => {
+    const PhotoThumb = () => (
+      <Box
+        backgroundColor="secondary"
+        flexGrow={1}
+        marginHorizontal={0.5}
+        style={theme => ({
+          cursor: 'pointer',
+          ':hover': { color: 'red', backgroundColor: theme.colors.secondaryDarker },
+        })}
+      />
+    );
+
+    return (
+      <Box padding={1} borderColor="black">
+        <Box backgroundColor="primary" height={5} marginBottom={0.5} />
+        <Box
+          display="flex"
+          height={3}
+          style={{
+            '> div:first-child': {
+              marginLeft: 0,
+            },
+            '> div:last-child': { marginRight: 0 },
+          }}
+        >
+          {Array.from(Array(5)).map((_, i) => <PhotoThumb key={i} />)}
+        </Box>
+      </Box>
+    );
+  });

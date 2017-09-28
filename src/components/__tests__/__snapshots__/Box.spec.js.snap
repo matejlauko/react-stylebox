@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly with props, {} 1`] = `
+Object {
+  "component": <div
+    className="a"
+  />,
+  "styles": "
+    .a{position:relative}",
+}
+`;
