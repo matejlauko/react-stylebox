@@ -1,6 +1,7 @@
 import { type FontSizeScale } from './typography';
 
 export type Styles = Object;
+export type RestProps = Object;
 
 export type Colors = {
   primary?: string,
@@ -36,8 +37,11 @@ export type Typography = {
   rhythm: number => string,
 };
 
+// TODO: what with .properties
 export type Theme = {
   typography: Typography,
 } & UserTheme;
 
 export type Bold = 'normal' | 'bold' | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+
+export type StyleProp = (Theme, Styles) => Styles | Styles; // Style function or object

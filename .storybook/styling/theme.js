@@ -26,6 +26,10 @@ const theme: UserTheme = {
     fontSizeScale: 'step2', // 8/9 step
     lineHeight: 1.3, // unitless
   },
+  heading: {
+    boldByDefault: true,
+    size3: 8,
+  },
 };
 
 export default theme;

@@ -1,15 +1,16 @@
 // @flow
 import React, { type Node, type ElementType } from 'react';
 import PT from 'prop-types';
-import { type Renderer, type Theme, type Styles, type Color } from '../types';
-import { composeBoxStyles, makeClassname } from './utils';
+import { type Renderer, type Theme, type Color, type StyleProp } from '../types';
+import { composeBoxStyles, makeClassname } from './boxBuild';
+import { composeStyles } from './compose';
 
 type MaybeRhythm = number | string;
 type ColorStyle = Color | string;
 
 export type BoxProps = {
   as?: ElementType, // React component or JSX string
-  style?: (Theme, Styles) => Styles | Styles, // Style function or object
+  style?: StyleProp,
   className?: string, // Class name for the component
   children?: Node, // Children of the component
   innerRef?: () => {}, // ref to created component
@@ -43,6 +44,7 @@ export type BoxProps = {
   width?: MaybeRhythm,
 
   // Flexbox layout
+  flex?: string | number,
   alignContent?:
     | 'flex-start'
     | 'flex-end'
@@ -96,13 +98,6 @@ const defaultStyles = (styles: BoxProps): BoxProps => {
   let baseStyles = {};
   baseStyles.position = 'relative';
 
-  // Flex shorthand
-  // if (typeof styles.flex === 'number') {
-  //   baseStyles.flexBasis = 'auto';
-  //   baseStyles.flexGrow = styles.flex;
-  //   baseStyles.flexShrink = styles.flex;
-  // }
-
   if (styles.borderColor) {
     if (!styles.borderWidth) styles.borderWidth = 1;
     if (!styles.borderStyle) styles.borderStyle = 'solid';
@@ -111,7 +106,8 @@ const defaultStyles = (styles: BoxProps): BoxProps => {
   // Flexbox helper
   if (
     !styles.display &&
-    (styles.flexDirection ||
+    (styles.flex ||
+      styles.flexDirection ||
       styles.justifyContent ||
       styles.alignItems ||
       styles.alignContent ||
@@ -131,12 +127,11 @@ const Box = (
   { as: Component, style, className, children, ...props }: BoxProps,
   { renderer, theme }: BoxContext
 ) => {
-  const { composedStyle, restProps } = composeBoxStyles(defaultStyles(props), theme.properties);
-  const otherStyles = typeof style === 'function' ? style(theme.properties, composedStyle) : style;
+  const [boxStyles, restProps] = composeBoxStyles(defaultStyles(props), theme.properties);
 
   const mixedStyleRules = {
-    ...composedStyle,
-    ...otherStyles,
+    ...boxStyles,
+    ...composeStyles(style, boxStyles)(theme.properties),
   };
   const rendererClassname = renderer.renderRule(() => mixedStyleRules);
 

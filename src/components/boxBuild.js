@@ -1,6 +1,6 @@
 // @flow
 import { type Node, type ElementType } from 'react';
-import { type Theme, type Styles } from '../types';
+import { type Theme, type Styles, type RestProps } from '../types';
 import { type BoxProps } from './Box';
 
 const getStyleValues = (props: BoxProps, getValue) =>
@@ -13,7 +13,10 @@ const getStyleValues = (props: BoxProps, getValue) =>
     return style;
   }, {});
 
-export function buildStyles(props: BoxProps, theme: Theme): { style: Styles, restProps: Object } {
+export function buildStyles(
+  props: BoxProps,
+  theme: Theme
+): { styles: Styles, restProps: RestProps } {
   const {
     margin,
     marginHorizontal = margin,
@@ -49,7 +52,6 @@ export function buildStyles(props: BoxProps, theme: Theme): { style: Styles, res
     borderWidth,
     borderBottomWidth = borderWidth,
     borderStyle,
-    color,
     display,
     flex,
     flexBasis,
@@ -83,7 +85,7 @@ export function buildStyles(props: BoxProps, theme: Theme): { style: Styles, res
   } = props;
 
   return {
-    style: {
+    styles: {
       // Rhythm
       ...getStyleValues(
         {
@@ -119,7 +121,6 @@ export function buildStyles(props: BoxProps, theme: Theme): { style: Styles, res
           borderLeftColor,
           borderRightColor,
           borderTopColor,
-          color,
         },
         value => theme.colors[value] || value
       ),
@@ -140,6 +141,7 @@ export function buildStyles(props: BoxProps, theme: Theme): { style: Styles, res
           borderTopRightRadius,
           borderTopWidth,
           display,
+          flex,
           flexBasis,
           flexDirection,
           flexGrow,
@@ -158,13 +160,10 @@ export function buildStyles(props: BoxProps, theme: Theme): { style: Styles, res
   };
 }
 
-export function composeBoxStyles(
-  props: BoxProps,
-  theme: Theme
-): { composedStyle: Styles, restProps: Object } {
-  const { style, restProps } = buildStyles(props, theme);
+export function composeBoxStyles(props: BoxProps, theme: Theme): [Styles, RestProps] {
+  const { styles, restProps } = buildStyles(props, theme);
 
-  return { composedStyle: style, restProps };
+  return [styles, restProps];
 }
 
 /**

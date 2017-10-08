@@ -1,6 +1,9 @@
 import { type UserTheme } from './types';
 
 const defaultTheme: UserTheme = {
+  colors: {},
+  heading: {},
+  text: {},
   typographySetup: {
     baseFontSize: 1,
     fontSizeScale: 'step2',
