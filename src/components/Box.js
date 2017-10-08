@@ -127,11 +127,11 @@ const Box = (
   { as: Component, style, className, children, ...props }: BoxProps,
   { renderer, theme }: BoxContext
 ) => {
-  const [boxStyles, restProps] = composeBoxStyles(defaultStyles(props), theme.properties);
+  const [boxStyles, restProps] = composeBoxStyles(defaultStyles(props), theme);
 
   const mixedStyleRules = {
     ...boxStyles,
-    ...composeStyles(style, boxStyles)(theme.properties),
+    ...composeStyles(style, boxStyles)(theme),
   };
   const rendererClassname = renderer.renderRule(() => mixedStyleRules);
 

@@ -37,7 +37,6 @@ export type Typography = {
   rhythm: number => string,
 };
 
-// TODO: what with .properties
 export type Theme = {
   typography: Typography,
 } & UserTheme;

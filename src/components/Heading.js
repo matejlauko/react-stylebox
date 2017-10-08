@@ -16,11 +16,11 @@ type HeadingContext = {
 const Heading = (props: HeadingProps, { theme }: HeadingContext) => {
   const type = props.type || 2;
   const {
-    size = get(theme, `properties.heading.size${type}`),
-    bold = get(theme, 'properties.heading.boldByDefault'),
-    fontFamily = get(theme, 'properties.heading.fontFamily'),
-    marginBottom = get(theme, 'properties.heading.marginBottom'),
-    marginTop = get(theme, 'properties.heading.marginTop'),
+    size = get(theme, `heading.size${type}`),
+    bold = get(theme, 'heading.boldByDefault'),
+    fontFamily = get(theme, 'heading.fontFamily'),
+    marginBottom = get(theme, 'heading.marginBottom'),
+    marginTop = get(theme, 'heading.marginTop'),
     ...restProps
   } = props;
 
@@ -28,7 +28,7 @@ const Heading = (props: HeadingProps, { theme }: HeadingContext) => {
     <Text
       as={`h${type}`}
       size={size}
-      bold={bold && get(theme, 'properties.heading.bold', true)}
+      bold={bold && get(theme, 'heading.bold', true)}
       fontFamily={fontFamily}
       marginBottom={marginBottom}
       marginTop={marginTop}

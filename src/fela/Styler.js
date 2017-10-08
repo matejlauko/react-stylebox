@@ -1,8 +1,9 @@
 // @flow
 import React, { type Node } from 'react';
+import PT from 'prop-types';
 import { Provider, ThemeProvider } from 'react-fela';
 import buildTheme from '../themeBuilder';
-import { type Renderer, type Theme } from '../types';
+import { type Renderer, type Theme, type UserTheme } from '../types';
 
 type StylerProps = {
   renderer: Renderer,
@@ -10,21 +11,34 @@ type StylerProps = {
   children: Node,
 };
 
-class Styler extends React.Component<StylerProps> {
-  render() {
-    const { renderer, children, theme, ...restProps } = this.props;
+type StylerState = {
+  theme: UserTheme,
+};
 
-    const builtTheme = buildTheme(theme);
+class Styler extends React.Component<StylerProps, StylerState> {
+  constructor(props: StylerProps) {
+    super(props);
+    this.state = {
+      theme: buildTheme(props.theme),
+    };
+  }
+
+  getChildContext() {
+    return {
+      theme: this.state.theme,
+    };
+  }
+
+  render() {
+    const { renderer, children } = this.props;
     const child = React.Children.only(children);
 
-    return (
-      <Provider renderer={renderer}>
-        <ThemeProvider theme={builtTheme}>
-          {React.isValidElement(child) ? React.cloneElement(child, { ...restProps }) : child}
-        </ThemeProvider>
-      </Provider>
-    );
+    return <Provider renderer={renderer}>{child}</Provider>;
   }
 }
+
+Styler.childContextTypes = {
+  theme: PT.object,
+};
 
 export default Styler;

@@ -40,7 +40,7 @@ const computeSetup = {
 };
 
 const Text = ({ as, style, ...props }: TextProps, { theme }: TextContext) => {
-  const [textStyles, restProps] = computeStyles(computeSetup)(props, theme.properties);
+  const [textStyles, restProps] = computeStyles(computeSetup)(props, theme);
   const composedStyles = composeStyles(style, textStyles);
 
   return <Box as={as || 'span'} style={composedStyles} {...restProps} />;

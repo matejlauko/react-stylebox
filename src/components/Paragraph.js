@@ -11,8 +11,8 @@ type ParagraphContext = {
 
 const Paragraph = (props: TextProps, { theme }: ParagraphContext) => {
   const {
-    marginBottom = get(theme, 'properties.paragraph.marginBottom'),
-    marginTop = get(theme, 'properties.paragraph.marginTop'),
+    marginBottom = get(theme, 'paragraph.marginBottom'),
+    marginTop = get(theme, 'paragraph.marginTop'),
     ...restProps
   } = props;
 
