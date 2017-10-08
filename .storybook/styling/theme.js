@@ -30,6 +30,10 @@ const theme: UserTheme = {
     boldByDefault: true,
     size3: 8,
   },
+  paragraph: {
+    marginBottom: 2,
+    marginTop: 2,
+  },
 };
 
 export default theme;
