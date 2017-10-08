@@ -34,6 +34,24 @@ const theme: UserTheme = {
     marginBottom: 2,
     marginTop: 2,
   },
+  button: {
+    borderRadius: '3px',
+    disabled: {
+      opacity: 0.7,
+    },
+    themes: {
+      primary: {
+        backgroundColor: colors.primary,
+        size: 1,
+        bold: true,
+        style: {
+          ':hover': {
+            backgroundColor: colors.primaryDarker,
+          },
+        },
+      },
+    },
+  },
 };
 
 export default theme;

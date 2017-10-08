@@ -13,6 +13,7 @@ const configureRenderer = (): {
   selectorPrefix: string,
 } => {
   const plugins = [...webPreset, placeholderPrefixer()];
+  console.log(plugins);
   const enhancers = [];
 
   // Dev
@@ -40,7 +41,7 @@ const configureRenderer = (): {
 };
 
 export default function getFelaRenderer(globalStyles?: string): Renderer {
-  const renderer = createRenderer(configureRenderer);
+  const renderer = createRenderer(configureRenderer());
 
   if (globalStyles) renderer.renderStatic(globalStyles);
 
