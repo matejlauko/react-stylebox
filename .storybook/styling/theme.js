@@ -20,6 +20,13 @@ const colors = {
 };
 
 const theme: UserTheme = {
+  breakpoints: {
+    xs: '0-767',
+    sm: '768-1023', // 48em
+    md: '1024-1199', // 64em
+    lg: '1200-1391', // 76em
+    xl: 1392, // 87em
+  },
   colors,
   typographySetup: {
     baseFontSize: 1, // rem

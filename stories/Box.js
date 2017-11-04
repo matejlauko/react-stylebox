@@ -69,3 +69,31 @@ storiesOf('Box/Layout', module)
       </Box>
     );
   });
+
+storiesOf('Box/Media', module)
+  .add('predefined media queries', () => (
+    <Box
+      backgroundColor="primary"
+      padding={1}
+      media={{
+        sm: { padding: 3 },
+        md: { padding: 4, textDecoration: 'underline' },
+        lg: { padding: 5 },
+        xl: { padding: 6 },
+      }}
+    >
+      Text
+    </Box>
+  ))
+  .add('custom media queries', () => (
+    <Box
+      backgroundColor="primary"
+      height="200px"
+      width="400px"
+      media={{
+        '500px-599px': { backgroundColor: 'secondary' },
+        '600-700': { backgroundColor: '#0fdf0f' },
+        700: { backgroundColor: '#e91a8e' },
+      }}
+    />
+  ));

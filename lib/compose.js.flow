@@ -1,4 +1,4 @@
-import { type Theme, type Styles, type StyleProp } from '../types';
+import { type Theme, type Styles, type StyleProp } from './types';
 import { assignStyle } from 'css-in-js-utils';
 
 export const composeStyles = (style: StyleProp, builtStyle?: Styles = {}) => (
