@@ -3,9 +3,9 @@
 exports[`renders correctly with props, {} 1`] = `
 Object {
   "component": <span
-    className="a"
+    className="xe296pg"
   />,
   "styles": "
-    .a{position:relative}",
+    .xe296pg{position:relative}",
 }
 `;

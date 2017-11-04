@@ -1,5 +1,5 @@
 // @flow
-import { type Theme, type Styles, type RestProps } from '../types';
+import { type Theme, type Styles, type RestProps } from './types';
 type StyleSetup = Object;
 type StyleProps = Object;
 

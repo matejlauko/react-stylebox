@@ -11,7 +11,7 @@
     "prepare": "yarn run build && yarn run flow-publish",
     "lint": "eslint src",
     "flow": "flow",
-    "flow-publish": "flow-copy-source src lib",
+    "flow-publish": "flow-copy-source -i **/*.spec.* src lib",
     "test": "jest",
     "test:watch": "jest --watch",
     "storybook": "start-storybook -p 6006",
