@@ -1,6 +1,6 @@
 {
   "name": "react-stylebox",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "repository": "git@github.com:matejlauko/react-stylebox.git",
   "description": "React components for easy layouting and styling",
   "main": "lib/index.js",
