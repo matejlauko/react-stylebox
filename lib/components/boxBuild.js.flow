@@ -193,8 +193,6 @@ export function buildBoxStyles(props: BoxProps, theme: Theme): [Styles, RestProp
     composedStyles = assignStyle(styles, computedMediaStyles);
   }
 
-  console.log('composedStyles', composedStyles);
-
   return [composedStyles, restProps];
 }
 
