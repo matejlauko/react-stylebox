@@ -7,3 +7,8 @@ StyleBox is a component system for styling your React application. Uses custom c
 
 **Definitely not ready for production use**
 
+
+// TODO:
+
+- borders
+- shorthands (pv, ml)

@@ -1,5 +1,5 @@
 // @flow
-import React, { type Node, type ElementType } from 'react';
+import * as React from 'react';
 import PT from 'prop-types';
 import {
   type Renderer,
@@ -15,10 +15,10 @@ type MaybeRhythm = number | string;
 type ColorStyle = Color | string;
 
 export type BoxProps = {
-  as?: ElementType, // React component or JSX string
+  as?: React.ElementType, // React component or JSX string
   style?: StyleProp,
   className?: string, // Class name for the component
-  children?: Node, // Children of the component
+  children?: React.Node, // Children of the component
   innerRef?: () => {}, // ref to created component
 
   media?: MediaDefinitions,
@@ -52,7 +52,7 @@ export type BoxProps = {
   width?: MaybeRhythm,
 
   // Flexbox layout
-  flex?: string | number,
+  flex?: string,
   alignContent?:
     | 'flex-start'
     | 'flex-end'
@@ -62,7 +62,7 @@ export type BoxProps = {
     | 'space-around',
   alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline',
   alignSelf?: 'auto' | 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline',
-  flexBasis?: number | string,
+  flexBasis?: string,
   flexDirection?: 'row' | 'row-reverse' | 'column' | 'column-reverse',
   flexGrow?: number,
   flexShrink?: number,

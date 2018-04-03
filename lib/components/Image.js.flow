@@ -31,7 +31,7 @@ const getComponent = imageAttrs => props => <img {...imageAttrs} {...props} />; 
 const Image = ({ as, size, src, alt, ...restProps }: ImageProps, { theme }: ImageContext) => {
   const imageAttrs: ImageAttrs = {
     width: `${String(size.w)}${typeof size.w === 'number' ? 'px' : ''}`,
-    height: size.h && `${String(size.h)}${typeof size.h === 'number' ? 'px' : ''}`,
+    height: size.h ? `${String(size.h)}${typeof size.h === 'number' ? 'px' : ''}` : undefined,
   };
   if (alt) {
     imageAttrs.alt = alt;
