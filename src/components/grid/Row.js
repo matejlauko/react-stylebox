@@ -1,19 +1,14 @@
 // @flow
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Box, { type BoxProps } from '../Box';
-import { type Theme } from '../../types';
-
-type RowContext = {
-  theme: Theme,
-};
+import withStyle from '../../withStyle';
 
 type RowProps = BoxProps;
 
 const Component: React.StatelessFunctionalComponent<*> = props => <div {...props} />;
 Component.displayName = 'Row';
 
-const Row = ({ as = Component, ...props }: RowProps, { theme }: RowContext) => {
+const Row = ({ as = Component, theme, ...props }: RowProps) => {
   return (
     <Box
       as={as}
@@ -29,8 +24,4 @@ const Row = ({ as = Component, ...props }: RowProps, { theme }: RowContext) => {
   );
 };
 
-Row.contextTypes = {
-  theme: PropTypes.object,
-};
-
-export default Row;
+export default withStyle('theme')(Row);

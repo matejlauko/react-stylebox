@@ -1,11 +1,11 @@
 // @flow
 import React from 'react';
-import PropTypes from 'prop-types';
-import { type Theme, type Styles } from '../types';
+import { type Styles } from '../types';
 import { type TextProps } from './Text';
 import Text from './Text';
 import { get } from '../utils';
 import { composeStyles } from '../compose';
+import withStyle from '../withStyle';
 
 // Browser button is rendered as div with button role because button element is
 // hard to style consistently in Firefox and maybe elsewhere. Div is just fine.
@@ -53,24 +53,16 @@ export type ButtonProps = TextProps & {
   raw?: boolean,
 };
 
-type ButtonContext = {
-  theme: Theme,
-};
-
-const Button = (
-  // $FlowFixMe
-  { as = BrowserButton, style, raw, ...restProps }: ButtonProps,
-  { theme }: ButtonContext
-) => {
+const Button = ({ as = BrowserButton, style, raw, theme, ...restProps }: ButtonProps) => {
   let updatedProps = { ...restProps };
 
   if (!raw) {
     // Defaults
     updatedProps = {
       borderRadius: get(theme, 'button.borderRadius'),
-      marginVertical: get(theme, 'button.marginVertical'),
-      paddingVertical: get(theme, 'button.paddingVertical', 0.5),
-      paddingHorizontal: get(theme, 'button.paddingHorizontal', 0.25),
+      marginY: get(theme, 'button.marginY'),
+      paddingX: get(theme, 'button.paddingX', 0.5),
+      paddingY: get(theme, 'button.paddingY', 0.25),
       opacity: restProps.disabled && get(theme, 'button.disabled.opacity'),
       ...updatedProps,
     };
@@ -91,19 +83,14 @@ const Button = (
   }
 
   return (
-    // $FlowFixMe
     <Text
       as={as}
       justifyContent="center"
       alignItems="center"
-      style={composeStyles(style, updatedProps.style)(theme)}
       {...updatedProps}
+      style={composeStyles(updatedProps.style, style)}
     />
   );
 };
 
-Button.contextTypes = {
-  theme: PropTypes.object,
-};
-
-export default Button;
+export default withStyle('theme')(Button);

@@ -1,9 +1,11 @@
 // @flow
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Box, { type BoxProps } from '../Box';
 import { type Theme } from '../../types';
 import { composeStyles } from '../../compose';
+import withStyle from '../../withStyle';
+import Col from './Col';
+import Row from './Row';
 
 type GridProps = BoxProps & {
   fluid?: boolean,
@@ -14,7 +16,19 @@ const DIMENSION_NAMES = ['sm', 'md', 'lg', 'xl'];
 const Component: React.StatelessFunctionalComponent<*> = props => <div {...props} />;
 Component.displayName = 'Grid';
 
-const Grid = ({ fluid = false, style, media, ...restProps }: GridProps) => {
+const generateGrid = gridSize => {
+  return (
+    <Row position="absolute" zIndex={0} top={0} left="1rem" right="1rem" width="100%" height="100%">
+      {Array.from(Array(12)).map((_, i) => (
+        <Col key={`grid-col-${i}`} grid={{ xs: 1 }}>
+          <Box backgroundColor="rgba(37,223,223, 0.2)" height="100%" />
+        </Col>
+      ))}
+    </Row>
+  );
+};
+
+const Grid = ({ fluid = false, style, media, children, theme, showGrid, ...restProps }: GridProps) => {
   const gridStyle = fluid
     ? (theme: Theme) => ({
         paddingLeft: theme.grid.outerMargin + 'rem',
@@ -32,7 +46,7 @@ const Grid = ({ fluid = false, style, media, ...restProps }: GridProps) => {
       (queries, d) => ({
         ...queries,
         [d]: {
-          width: String(theme.grid.container[d]) + 'rem',
+          width: theme.grid.container[d],
         },
       }),
       {}
@@ -45,12 +59,11 @@ const Grid = ({ fluid = false, style, media, ...restProps }: GridProps) => {
       style={composeStyles(gridStyle, style)}
       media={composeStyles(gridMedia, media)}
       {...restProps}
-    />
+    >
+      {showGrid && generateGrid(theme.grid.gridSize)}
+      {children}
+    </Box>
   );
 };
 
-Grid.contextTypes = {
-  theme: PropTypes.object,
-};
-
-export default Grid;
+export default withStyle('theme')(Grid);

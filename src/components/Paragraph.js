@@ -1,26 +1,20 @@
 // @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import Text, { type TextProps } from './Text';
-import { type Theme } from '../types';
 import { get } from '../utils';
+import withStyle from '../withStyle';
 
-type ParagraphContext = {
-  theme: Theme,
-};
+const Paragraph = (props: TextProps) => {
+  const theme = props.theme;
 
-const Paragraph = (props: TextProps, { theme }: ParagraphContext) => {
   const {
     marginBottom = get(theme, 'paragraph.marginBottom'),
     marginTop = get(theme, 'paragraph.marginTop'),
+    lineHeight = get(theme, 'paragraph.lineHeight'),
     ...restProps
   } = props;
 
-  return <Text as={'p'} marginBottom={marginBottom} marginTop={marginTop} {...restProps} />;
+  return <Text as={'p'} marginBottom={marginBottom} marginTop={marginTop} lineHeight={lineHeight} {...restProps} />;
 };
 
-Paragraph.contextTypes = {
-  theme: PropTypes.object,
-};
-
-export default Paragraph;
+export default withStyle('theme')(Paragraph);

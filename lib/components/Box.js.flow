@@ -1,40 +1,36 @@
 // @flow
-import React, { type Node, type ElementType } from 'react';
+import * as React from 'react';
 import PT from 'prop-types';
-import {
-  type Renderer,
-  type Theme,
-  type Color,
-  type StyleProp,
-  type MediaDefinitions,
-} from '../types';
+import { type Renderer, type Theme, type Color, type StyleProp, type MediaDefinitions } from '../types';
 import { buildBoxStyles, makeClassname } from './boxBuild';
 import { composeStyles } from '../compose';
+import withStyle from '../withStyle';
 
 type MaybeRhythm = number | string;
 type ColorStyle = Color | string;
 
 export type BoxProps = {
-  as?: ElementType, // React component or JSX string
+  as?: React.ElementType, // React component or JSX string
+  theme?: Theme,
   style?: StyleProp,
   className?: string, // Class name for the component
-  children?: Node, // Children of the component
+  children?: React.Node, // Children of the component
   innerRef?: () => {}, // ref to created component
 
   media?: MediaDefinitions,
 
   // Rhythm props
   margin?: MaybeRhythm,
-  marginHorizontal?: MaybeRhythm,
-  marginVertical?: MaybeRhythm,
+  marginX?: MaybeRhythm,
+  marginY?: MaybeRhythm,
   marginBottom?: MaybeRhythm,
   marginLeft?: MaybeRhythm,
   marginRight?: MaybeRhythm,
   marginTop?: MaybeRhythm,
 
   padding?: MaybeRhythm,
-  paddingHorizontal?: MaybeRhythm,
-  paddingVertical?: MaybeRhythm,
+  paddingX?: MaybeRhythm,
+  paddingY?: MaybeRhythm,
   paddingBottom?: MaybeRhythm,
   paddingLeft?: MaybeRhythm,
   paddingRight?: MaybeRhythm,
@@ -52,17 +48,11 @@ export type BoxProps = {
   width?: MaybeRhythm,
 
   // Flexbox layout
-  flex?: any, // string | number (flowtype bug?)
-  alignContent?:
-    | 'flex-start'
-    | 'flex-end'
-    | 'center'
-    | 'stretch'
-    | 'space-between'
-    | 'space-around',
+  flex?: string | number,
+  alignContent?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'space-between' | 'space-around',
   alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline',
   alignSelf?: 'auto' | 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline',
-  flexBasis?: string | number, // (flowtype bug?)
+  flexBasis?: number | string,
   flexDirection?: 'row' | 'row-reverse' | 'column' | 'column-reverse',
   flexGrow?: number,
   flexShrink?: number,
@@ -75,6 +65,7 @@ export type BoxProps = {
   overflow?: 'visible' | 'hidden' | 'scroll',
   position?: 'absolute' | 'relative',
   zIndex?: number,
+  textAlign?: 'center' | 'left' | 'right' | 'justify',
 
   borderStyle?: 'solid' | 'dotted' | 'dashed',
 
@@ -99,7 +90,6 @@ export type BoxProps = {
 
 type BoxContext = {
   renderer: Renderer,
-  theme: Theme,
 };
 
 const defaultStyles = (styles: BoxProps): BoxProps => {
@@ -110,6 +100,14 @@ const defaultStyles = (styles: BoxProps): BoxProps => {
     if (!styles.borderWidth) styles.borderWidth = 1;
     if (!styles.borderStyle) styles.borderStyle = 'solid';
   }
+
+  ['Top', 'Bottom', 'Left', 'Right'].forEach(d => {
+    if (styles[`border${d}Color`]) {
+      if (!styles.borderWidth) styles.borderWidth = 0;
+      if (!styles[`border${d}Width`]) styles[`border${d}Width`] = 1;
+      if (!styles.borderStyle) styles.borderStyle = 'solid';
+    }
+  });
 
   // Flexbox helper
   if (
@@ -131,15 +129,12 @@ const defaultStyles = (styles: BoxProps): BoxProps => {
   };
 };
 
-const Box = (
-  { as: Component, style, className, children, ...props }: BoxProps,
-  { renderer, theme }: BoxContext
-) => {
+const Box = ({ as: Component, style, className, children, theme, ...props }: BoxProps, { renderer }: BoxContext) => {
   const [boxStyles, restProps] = buildBoxStyles(defaultStyles(props), theme);
 
   const mixedStyleRules = {
     ...boxStyles,
-    ...composeStyles(style, boxStyles)(theme),
+    ...composeStyles(boxStyles, style)(theme),
   };
   const rendererClassname = renderer.renderRule(() => mixedStyleRules);
 
@@ -153,10 +148,8 @@ const Box = (
 };
 
 Box.displayName = 'Box';
-
 Box.contextTypes = {
   renderer: PT.object,
-  theme: PT.object,
 };
 
-export default Box;
+export default withStyle('theme')(Box);

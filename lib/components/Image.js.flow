@@ -1,8 +1,7 @@
 // @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import Box, { type BoxProps } from './Box';
-import { type Theme } from '../types';
+import { composeStyles } from '../compose';
 
 type Size = {|
   w: number | string, // px or %
@@ -15,10 +14,6 @@ type ImageProps = BoxProps & {
   alt?: string,
 };
 
-type ImageContext = {
-  theme: Theme,
-};
-
 type ImageAttrs = {
   alt?: string,
   role?: string,
@@ -28,22 +23,35 @@ type ImageAttrs = {
 
 const getComponent = imageAttrs => props => <img {...imageAttrs} {...props} />; // eslint-disable-line jsx-a11y/alt-text
 
-const Image = ({ as, size, src, alt, ...restProps }: ImageProps, { theme }: ImageContext) => {
+const Image = ({ as, size, src, responsive = true, width, height, alt, media, ...restProps }: ImageProps) => {
   const imageAttrs: ImageAttrs = {
     width: `${String(size.w)}${typeof size.w === 'number' ? 'px' : ''}`,
     height: size.h ? `${String(size.h)}${typeof size.h === 'number' ? 'px' : ''}` : undefined,
   };
+  const boxSize = {
+    width: responsive ? '100%' : width || imageAttrs.width,
+    height: responsive ? 'auto' : height || imageAttrs.height,
+  };
+
+  if (responsive) {
+    media = composeStyles(
+      {
+        sm: {
+          width: width || imageAttrs.width,
+          height: height || imageAttrs.height,
+        },
+      },
+      media
+    );
+  }
+
   if (alt) {
     imageAttrs.alt = alt;
   } else {
     imageAttrs.role = 'presentation';
   }
 
-  return <Box as={getComponent(imageAttrs)} src={src} {...restProps} />;
-};
-
-Image.contextTypes = {
-  theme: PropTypes.object,
+  return <Box as={getComponent(imageAttrs)} src={src} media={media} {...boxSize} {...restProps} />;
 };
 
 export default Image;

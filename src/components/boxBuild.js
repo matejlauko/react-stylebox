@@ -2,7 +2,7 @@
 import { type Node, type ElementType } from 'react';
 import { type Theme, type Styles, type RestProps, type Dimension } from '../types';
 import { type BoxProps } from './Box';
-import { assignStyle } from 'css-in-js-utils';
+import mergeDeepRight from 'ramda/src/mergeDeepRight';
 
 const getStyleValues = (props: BoxProps, getValue) =>
   Object.keys(props).reduce((style, prop) => {
@@ -14,26 +14,23 @@ const getStyleValues = (props: BoxProps, getValue) =>
     return style;
   }, {});
 
-export function buildStyles(
-  props: BoxProps,
-  theme: Theme
-): { styles: Styles, restProps: RestProps } {
+export function buildStyles(props: BoxProps, theme: Theme): { styles: Styles, restProps: RestProps } {
   const {
     margin,
-    marginHorizontal = margin,
-    marginVertical = margin,
-    marginBottom = marginVertical,
-    marginLeft = marginHorizontal,
-    marginRight = marginHorizontal,
-    marginTop = marginVertical,
+    marginX = margin,
+    marginY = margin,
+    marginBottom = marginY,
+    marginLeft = marginX,
+    marginRight = marginX,
+    marginTop = marginY,
 
     padding,
-    paddingHorizontal = padding,
-    paddingVertical = padding,
-    paddingBottom = paddingVertical,
-    paddingLeft = paddingHorizontal,
-    paddingRight = paddingHorizontal,
-    paddingTop = paddingVertical,
+    paddingX = padding,
+    paddingY = padding,
+    paddingBottom = paddingY,
+    paddingLeft = paddingX,
+    paddingRight = paddingX,
+    paddingTop = paddingY,
 
     bottom,
     height,
@@ -65,6 +62,7 @@ export function buildStyles(
     overflow,
     position,
     zIndex,
+    textAlign,
 
     borderLeftWidth = borderWidth,
     borderRightWidth = borderWidth,
@@ -153,6 +151,7 @@ export function buildStyles(
           overflow,
           position,
           zIndex,
+          textAlign,
         },
         value => value
       ),
@@ -178,19 +177,26 @@ export function buildBoxStyles(props: BoxProps, theme: Theme): [Styles, RestProp
    * })}
    */
   if (media) {
-    const mediaStyleDefinitions: { [Dimension]: BoxProps } =
-      typeof media === 'function' ? media(theme) : media;
+    const mediaStyleDefinitions: { [Dimension]: BoxProps } = typeof media === 'function' ? media(theme) : media;
 
-    const computedMediaStyles = Object.keys(
-      mediaStyleDefinitions
-    ).reduce((mediaStyles, dimension) => {
+    const computedMediaStyles = Object.keys(mediaStyleDefinitions).reduce((mediaStyles, dimension) => {
       const boxStyle = buildStyles(mediaStyleDefinitions[dimension], theme);
-      const mediaD = theme.mediaDefinition(dimension);
-      mediaStyles[mediaD] = assignStyle(boxStyle.styles, boxStyle.restProps);
+      const computedStyles = mergeDeepRight(boxStyle.styles, boxStyle.restProps);
+
+      // zero viewport case (xs)
+      if (theme.breakpoints[dimension] === 0) {
+        mediaStyles = {
+          ...mediaStyles,
+          ...computedStyles,
+        };
+      } else {
+        const mediaD = theme.mediaDefinition(dimension);
+        mediaStyles[mediaD] = computedStyles;
+      }
       return mediaStyles;
     }, {});
 
-    composedStyles = assignStyle(styles, computedMediaStyles);
+    composedStyles = mergeDeepRight(styles, computedMediaStyles);
   }
 
   return [composedStyles, restProps];

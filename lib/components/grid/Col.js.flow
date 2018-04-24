@@ -1,17 +1,22 @@
 // @flow
-import PropTypes from 'prop-types';
 import React from 'react';
-import { assignStyle } from 'css-in-js-utils';
 import uniq from 'ramda/src/uniq';
 import Box, { type BoxProps } from '../Box';
 import { type Theme, Dimension } from '../../types';
+import withStyle from '../../withStyle';
+import { composeStyles } from '../../compose';
+
 /**
  * <Col
- *   grid={{
- *     xs: 5,
- *     md: false,
- *     xl: true
- *   }}
+ *  grid={{
+ *    xs: 5,
+ *    md: false,
+ *    xl: true
+ *  }}
+ *  offset={{
+ *    xs: 8,
+ *    sm: 0
+ *  }}
  */
 
 type Rule = number | boolean;
@@ -23,10 +28,6 @@ type ColProps = BoxProps & {
   offset?: OffsetSettings,
   display?: 'string',
   nomarg?: boolean,
-};
-
-type ColContext = {
-  theme: Theme,
 };
 
 const defaultStyle = (display?: string) => ({
@@ -43,7 +44,7 @@ export const gridRules = (theme: Theme, display?: string = 'block') => (
   nomarg?: boolean
 ): Object => {
   if (typeof rule === 'number' && !isNaN(parseFloat(rule))) {
-    let nom = 100 / theme.grid.gridSize * (rule: number) + '%';
+    let nom = 100 / theme.grid.gridSize * rule + '%';
 
     return {
       flexGrow: 0,
@@ -64,54 +65,53 @@ export const offsetRules = (theme: Theme) => (d: Dimension, rule: number) => ({
 const Component = props => <div {...props} />;
 Component.displayName = 'Col';
 
-const Col = (
-  {
-    as = Component,
-    grid,
-    offset,
-    display = 'block',
-    nomarg,
-    media: customMedia,
-    ...restProps
-  }: ColProps,
-  { theme }: ColContext
-) => {
+const Col = ({
+  as = Component,
+  grid,
+  offset,
+  display = 'block',
+  nomarg,
+  media: customMedia,
+  theme,
+  ...restProps
+}: ColProps) => {
   let gridStyles = {};
 
   if (grid || offset) {
     const makeGridRules = gridRules(theme, display);
     const makeOffsetRules = offsetRules(theme);
-    const dimensions = uniq(Object.keys(grid).concat(Object.keys(offset)));
+    const dimensions = uniq(Object.keys(grid || {}).concat(Object.keys(offset || {})));
 
     gridStyles = dimensions.reduce((styles, d) => {
       styles[d] = Object.assign(
         {},
         styles[d],
-        grid[d] ? makeGridRules(d, grid[d], nomarg) : null,
-        offset[d] ? makeOffsetRules(d, offset[d]) : null
+        grid && grid[d] !== undefined ? makeGridRules(d, grid[d], nomarg) : null,
+        offset && offset[d] !== undefined ? makeOffsetRules(d, offset[d]) : null
       );
       return styles;
     }, {});
   }
 
-  const media = assignStyle(
+  const media = composeStyles(
     {
+      ...gridStyles,
       xs: {
         display,
         flexGrow: 1,
         flexShrink: 0,
-        flexBasis: 0,
+        flexBasis: '100%', // or 0 (maybe nope, so far good)
         maxWidth: '100%',
+        marginBottom: nomarg ? undefined : 1,
+        ...gridStyles.xs,
       },
     },
-    gridStyles,
     customMedia
   );
 
   return (
     <Box
       as={as}
-      position="relative"
       paddingRight={theme.grid.gutterWidth / 2 + 'rem'}
       paddingLeft={theme.grid.gutterWidth / 2 + 'rem'}
       media={media}
@@ -121,8 +121,5 @@ const Col = (
 };
 
 Col.displayName = 'Col';
-Col.contextTypes = {
-  theme: PropTypes.object,
-};
 
-export default Col;
+export default withStyle('theme')(Col);

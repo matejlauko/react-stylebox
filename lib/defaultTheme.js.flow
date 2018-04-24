@@ -1,19 +1,25 @@
-import { type UserTheme } from './types';
+import {
+  type UserTheme
+} from './types';
+
+const colors = {
+  primary: 'red',
+  secondary: 'blue',
+  text: 'black',
+};
 
 const defaultTheme: UserTheme = {
+  colors,
   breakpoints: {},
-  grid: {
-    gridSize: 12,
-    gutterWidth: 2,
-    outerMargin: 2,
-    container: {},
-  },
-  colors: {},
   heading: {},
-  text: {},
+  text: {
+    bold: 600,
+    fontFamily: 'Sans-Serif',
+    color: colors.text,
+  },
   typographySetup: {
-    baseFontSize: 1,
-    fontSizeScale: 'step2',
+    baseFontSize: 1, // rem
+    fontSizeScale: 'step2', // 8/9 step
     lineHeight: 1.3,
   },
 };

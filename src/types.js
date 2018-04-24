@@ -41,13 +41,6 @@ export type TypographySetup = {|
 export type UserTheme = {
   typographySetup?: TypographySetup,
   colors?: Colors,
-  grid?: {
-    gridSize?: number,
-    gutterWidth?: number,
-    outerMargin?: number,
-    container?: DimensionDefinitions,
-  },
-  breakpoints?: DimensionDefinitions,
 };
 
 export type Typography = {
@@ -59,14 +52,7 @@ export type Typography = {
 
 export type Theme = {
   typography: Typography,
-  grid: {
-    gridSize: number,
-    gutterWidth: number,
-    outerMargin: number,
-    container: DimensionDefinitions,
-  },
-  breakpoints: DimensionDefinitions,
-  mediaDefinition: Dimension => string,
+  mediaDefinition?: Dimension => string,
 } & UserTheme;
 
 export type StyleProp = (Theme, Styles) => Styles | Styles; // Style function or object
