@@ -1,6 +1,6 @@
 {
   "name": "react-stylebox",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": "git@github.com:matejlauko/react-stylebox.git",
   "description": "React components for easy layouting and styling",
   "main": "lib/index.js",
@@ -66,7 +66,9 @@
     "react-fela": "^6.0.0"
   },
   "jest": {
-    "testMatch": ["**/?(*.)(spec|test).js?(x)"]
+    "testMatch": [
+      "**/?(*.)(spec|test).js?(x)"
+    ]
   },
   "dependencies": {
     "css-in-js-utils": "^2.0.0",

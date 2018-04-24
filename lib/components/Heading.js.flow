@@ -1,22 +1,20 @@
 // @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import Text, { type TextProps } from './Text';
-import { type Theme } from '../types';
 import { get } from '../utils';
+import withStyle from '../withStyle';
 
 export type HeadingProps = TextProps & {
   type?: number, // Type of heading (1 - 6)
 };
 
-type HeadingContext = {
-  theme: Theme,
-};
-
-const Heading = (props: HeadingProps, { theme }: HeadingContext) => {
+const Heading = (props: HeadingProps) => {
   const type = props.type || 2;
+  const theme = props.theme;
+
   const {
     size = get(theme, `heading.size${type}`),
+    color = get(theme, 'heading.color'),
     bold = get(theme, 'heading.boldByDefault'),
     fontFamily = get(theme, 'heading.fontFamily'),
     marginBottom = get(theme, 'heading.marginBottom'),
@@ -28,7 +26,8 @@ const Heading = (props: HeadingProps, { theme }: HeadingContext) => {
     <Text
       as={`h${type}`}
       size={size}
-      bold={bold && get(theme, 'heading.bold', true)}
+      color={color}
+      bold={bold && (bold === true ? get(theme, 'heading.bold', true) : bold)}
       fontFamily={fontFamily}
       marginBottom={marginBottom}
       marginTop={marginTop}
@@ -37,8 +36,4 @@ const Heading = (props: HeadingProps, { theme }: HeadingContext) => {
   );
 };
 
-Heading.contextTypes = {
-  theme: PropTypes.object,
-};
-
-export default Heading;
+export default withStyle('theme')(Heading);

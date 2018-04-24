@@ -36,13 +36,18 @@ const configureRenderer = (): {
     enhancers,
     // Fix for monolithic classnames (generated classnames can have number at the beginning, but they don't work in the browser)
     selectorPrefix: process.env.NODE_ENV !== 'production' ? 'x' : '',
+    mediaQueryOrder: [],
   };
 };
 
-export default function getFelaRenderer(globalStyles?: string): Renderer {
+export default function creteFelaRenderer(globalStyles?: string, fonts: []): Renderer {
   const renderer = createRenderer(configureRenderer());
 
   if (globalStyles) renderer.renderStatic(globalStyles);
+
+  if (fonts && fonts.length) {
+    fonts.forEach(fontObj => renderer.renderFont(...fontObj));
+  }
 
   return renderer;
 }

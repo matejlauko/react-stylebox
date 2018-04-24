@@ -1,11 +1,16 @@
-import { type Theme, type Styles, type StyleProp } from './types';
-import { assignStyle } from 'css-in-js-utils';
+import {
+  type Theme,
+  type Styles,
+  type StyleProp
+} from './types';
+import mergeDeepRight from 'ramda/src/mergeDeepRight';
 
-export const composeStyles = (style: StyleProp, builtStyle?: Styles = {}) => (
+export const composeStyles = (builtStyle ? : Styles = {}, style: StyleProp = {}) => (
   theme: Theme,
   parentStyle: Styles
 ) => {
-  const styleObject = typeof style === 'function' ? style(theme, builtStyle) : style;
+  const builtStyleObject = typeof builtStyle === 'function' ? builtStyle(theme) : builtStyle;
+  const styleObject = typeof style === 'function' ? style(theme, builtStyleObject) : style;
 
-  return assignStyle(builtStyle, styleObject);
+  return mergeDeepRight(builtStyleObject, styleObject);
 };

@@ -27,6 +27,17 @@ const theme: UserTheme = {
     lg: '1200-1391', // 76em
     xl: 1392, // 87em
   },
+  grid: {
+    gridSize: 12,
+    gutterWidth: 2,
+    outerMargin: 2,
+    container: {
+      sm: 46, // 736px
+      md: 61, // 976px
+      lg: 75, // 1216px
+      xl: 85, // 1360px
+    },
+  },
   colors,
   typographySetup: {
     baseFontSize: 1, // rem

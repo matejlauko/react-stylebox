@@ -28,9 +28,7 @@ const scale = {
 
 export type FontSizeScale = number | $Keys<typeof scale>;
 
-export const calculateFontSize = (baseFontSize: number, scaleRatio: number) => (
-  level: number
-): string =>
+export const calculateFontSize = (baseFontSize: number, scaleRatio: number) => (level: number): string =>
   Array.from(Array(Math.abs(level))).reduce(size => {
     return level > 0 ? size * (1 / scaleRatio) : size / (1 / scaleRatio);
   }, baseFontSize) + 'rem';
@@ -42,7 +40,7 @@ const typography = ({ baseFontSize, fontSizeScale, lineHeight }: TypographySetup
     baseFontSize: baseFontSize + 'rem',
     fontSize: calculateFontSize(baseFontSize, scaleRatio),
     lineHeight,
-    rhythm: (ratio: number) => lineHeight * ratio + 'em',
+    rhythm: (ratio: number) => lineHeight * ratio + 'rem',
   };
 };
 
